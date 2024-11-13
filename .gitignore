@@ -1,3 +1,6 @@
 *.autosave
 slprj/
-/.vocode
+.vscode/
+*.mexw64
+*.slxc
+*.original
