@@ -100,92 +100,29 @@ void iPark(IPARK_REGS *p, THETA_REGS *q)
     p->beta = (p->d * q->sin_theta) + (p->q * q->cos_theta);
 }
 
-/// @brief voltage d ramp given
-/// @param ramp_Ud_given
-void Ramp_Ud_Given(float32 ramp_Ud_given)
+/// @brief Ramp Given(given->目标值；delta->变换率；length->变换时间）
+/// @param ramp_reference(v)
+void Ramp_Given(RAMP_REFERENCE *v)
 {
-    ramp_Ud_count = ramp_Ud_count + 1;
-    if (ramp_Ud_count >= ramp_Ud_length)
+    v->count = v->count + 1;
+    if (v->count >= v->length)
     {
-        ramp_Ud_count = 0;
-        if (ramp_Ud_output < ramp_Ud_given)
+        v->count = 0;
+        if (v->output < v->Given)
         {
-            ramp_Ud_output = ramp_Ud_output + ramp_Ud_delta;
-            if (ramp_Ud_output > ramp_Ud_given)
-                ramp_Ud_output = ramp_Ud_given;
+            v->output = v->output + v->delta;
+            if (v->output > v->Given)
+            {
+                v->output = v->Given;
+            }
         }
-
-        if (ramp_Ud_output > ramp_Ud_given)
+        else if (v->output > v->Given)
         {
-            ramp_Ud_output = ramp_Ud_output - ramp_Ud_delta;
-            if (ramp_Ud_output < ramp_Ud_given)
-                ramp_Ud_output = ramp_Ud_given;
-        }
-    }
-}
-
-void Ramp_Uq_Given(float32 ramp_Uq_given)
-{
-    ramp_Uq_count = ramp_Uq_count + 1;
-    if (ramp_Uq_count >= ramp_Uq_length)
-    {
-        ramp_Uq_count = 0;
-        if (ramp_Uq_output < ramp_Uq_given)
-        {
-            ramp_Uq_output = ramp_Uq_output + ramp_Uq_delta;
-            if (ramp_Uq_output > ramp_Uq_given)
-                ramp_Uq_output = ramp_Uq_given;
-        }
-
-        if (ramp_Uq_output > ramp_Uq_given)
-        {
-            ramp_Uq_output = ramp_Uq_output - ramp_Uq_delta;
-            if (ramp_Uq_output < ramp_Uq_given)
-                ramp_Uq_output = ramp_Uq_given;
-        }
-    }
-}
-
-void Ramp_Id_Given(float32 ramp_Id_given)
-{
-    ramp_Id_count = ramp_Id_count + 1;
-    if (ramp_Id_count >= ramp_Id_length)
-    {
-        ramp_Id_count = 0;
-        if (ramp_Id_output < ramp_Id_given)
-        {
-            ramp_Id_output = ramp_Id_output + ramp_Id_delta;
-            if (ramp_Id_output > ramp_Id_given)
-                ramp_Id_output = ramp_Id_given;
-        }
-
-        if (ramp_Id_output > ramp_Id_given)
-        {
-            ramp_Id_output = ramp_Id_output - ramp_Id_delta;
-            if (ramp_Id_output < ramp_Id_given)
-                ramp_Id_output = ramp_Id_given;
-        }
-    }
-}
-
-void Ramp_Iq_Given(float32 ramp_Iq_given)
-{
-    ramp_Iq_count = ramp_Iq_count + 1;
-    if (ramp_Iq_count >= ramp_Iq_length)
-    {
-        ramp_Iq_count = 0;
-        if (ramp_Iq_output < ramp_Iq_given)
-        {
-            ramp_Iq_output = ramp_Iq_output + ramp_Iq_delta;
-            if (ramp_Iq_output > ramp_Iq_given)
-                ramp_Iq_output = ramp_Iq_given;
-        }
-
-        if (ramp_Iq_output > ramp_Iq_given)
-        {
-            ramp_Iq_output = ramp_Iq_output - ramp_Iq_delta;
-            if (ramp_Iq_output < ramp_Iq_given)
-                ramp_Iq_output = ramp_Iq_given;
+            v->output = v->output - v->delta;
+            if (v->output < v->Given)
+            {
+                v->output = v->Given;
+            }
         }
     }
 }

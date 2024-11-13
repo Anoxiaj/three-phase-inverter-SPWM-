@@ -44,8 +44,8 @@ void SPWM_2Closed_loop(double out_var[9], double in_var[12]) // 相当于主函�
 		sin_cos_cal(&U_theta); // 正余弦计算
 		INV_XY_CAL();		   // 坐标变换-->I_feedback_d, I_feedback_q, U_feedback_d, U_feedback_q
 
-		OPEN_LOOP(m);
-		// VOLTAGE_CLOSED_LOOP(Vref);
+		// OPEN_LOOP(m);
+		VOLTAGE_CLOSED_LOOP(Vref);
 		// CURRENT_CLOSED_LOOP(m);
 	}
 
@@ -58,9 +58,9 @@ void SPWM_2Closed_loop(double out_var[9], double in_var[12]) // 相当于主函�
 	out_var[4] = waveC < in_var[11] ? 1 : 0;
 	out_var[5] = 1 - out_var[4];
 	// 测试端口6-8
-	out_var[6] = waveA;
-	out_var[7] = waveB;
-	out_var[8] = waveC;
+	out_var[6] = U_theta.theta;
+	out_var[7] = U_feedback_d;
+	out_var[8] = U_feedback_q;
 
 	pulse_f_Old = pulse_f;
 }

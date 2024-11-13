@@ -9,6 +9,10 @@ float32 waveA, waveB, waveC;
 
 PID Ud_pid;
 PID Uq_pid;
+RAMP_REFERENCE Ud_ramp;
+RAMP_REFERENCE Uq_ramp;
+RAMP_REFERENCE Id_ramp;
+RAMP_REFERENCE Iq_ramp;
 
 // for pid control
 float32 U_feedback_d, U_feedback_q;
@@ -78,16 +82,17 @@ void VOLTAGE_CLOSED_LOOP(float V_ref)
     ICLARK_REGS UiClark;
 
     /*d轴斜坡给定*/
-    ramp_Ud_delta = 1;
-    ramp_Ud_length = 10;
+    Ud_ramp.Given = V_ref;
+    Ud_ramp.delta = 1;
+    Ud_ramp.length = 10;
 
-    Ramp_Ud_Given(Vref);
-    Ud_pid.ref = ramp_Ud_output;
+    Ramp_Given(&Ud_ramp);
+    Ud_pid.ref = Ud_ramp.output;
     Ud_pid.fdb = U_feedback_d;
 
     /*d轴PID计算*/
-    Ud_pid.Kp = 0.1;
-    Ud_pid.Ki = 0;
+    Ud_pid.Kp = 0.5;
+    Ud_pid.Ki = 0.1;
 
     Ud_pid.upper_limit = V_ref * 1.44;  // d轴PID限幅
     Ud_pid.lower_limit = -V_ref * 1.44; // d轴PID限幅
@@ -95,16 +100,17 @@ void VOLTAGE_CLOSED_LOOP(float V_ref)
     Pid_calculation(&Ud_pid); // 计算出d轴pid输出
 
     /*q轴斜坡给定*/
-    ramp_Uq_delta = 1;
-    ramp_Uq_length = 10;
+    Uq_ramp.Given = 0;
+    Uq_ramp.delta = 1;
+    Uq_ramp.length = 10;
 
-    Ramp_Uq_Given(0.1);
-    Uq_pid.ref = ramp_Uq_output;
+    Ramp_Given(&Uq_ramp);
+    Uq_pid.ref = Uq_ramp.output;
     Uq_pid.fdb = U_feedback_q;
 
     /*q轴PID计算*/
-    Uq_pid.Kp = 0.1;
-    Uq_pid.Ki = 0;
+    Uq_pid.Kp = 0.5;
+    Uq_pid.Ki = 0.1;
 
     Uq_pid.upper_limit = V_ref * 1.44;  // d轴PID限幅
     Uq_pid.lower_limit = -V_ref * 1.44; // d轴PID限幅

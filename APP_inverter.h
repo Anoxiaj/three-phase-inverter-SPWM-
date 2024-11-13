@@ -56,6 +56,16 @@ typedef struct
 } ICLARK_REGS;
 #define ICLARK_REGS_DEFAULTS {0, 0, 0, 0, 0}
 
+/*斜坡给定*/
+typedef struct
+{
+    float Given;
+    float output;
+    float delta;
+    unsigned int count;
+    unsigned int length;
+} RAMP_REFERENCE;
+
 /*调节器结构体*/
 typedef struct
 {
@@ -79,6 +89,10 @@ extern float theta_50Hz;
 
 extern PID Ud_pid;
 extern PID Uq_pid;
+extern RAMP_REFERENCE Ud_ramp;
+extern RAMP_REFERENCE Uq_ramp;
+extern RAMP_REFERENCE Id_ramp;
+extern RAMP_REFERENCE Iq_ramp;
 
 extern float U_Clark_a, U_Clark_b, U_Clark_c, U_Clark_alpha, U_Clark_beta;
 extern float I_Clark_a, I_Clark_b, I_Clark_c, I_Clark_alpha, I_Clark_beta;

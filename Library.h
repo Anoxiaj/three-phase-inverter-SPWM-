@@ -52,8 +52,7 @@ extern void Clark(CLARK_REGS *p);
 extern void iClark(ICLARK_REGS *p);
 extern void Park(PARK_REGS *p, THETA_REGS *q);
 extern void iPark(IPARK_REGS *p, THETA_REGS *q);
-extern void Ramp_Ud_Given(float32 ramp_Ud_given);
-extern void Ramp_Uq_Given(float32 ramp_Uq_given);
+extern void Ramp_Given(RAMP_REFERENCE *v);
 
 extern void Pid_calculation(PID *p);
 
