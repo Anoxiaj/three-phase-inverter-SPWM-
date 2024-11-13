@@ -39,14 +39,11 @@ extern float32 Sample_curr_A, Sample_curr_B, Sample_curr_C;
 
 extern float32 Vref, Iref, Vdc;
 
-extern float32 ramp_Ud_delta, ramp_Ud_length, ramp_Ud_count, ramp_Ud_output;
-extern float32 ramp_Uq_delta, ramp_Uq_length, ramp_Uq_count, ramp_Uq_output;
-extern float32 ramp_Id_delta, ramp_Id_length, ramp_Id_count, ramp_Id_output;
-extern float32 ramp_Iq_delta, ramp_Iq_length, ramp_Iq_count, ramp_Iq_output;
-
 extern void Var_allocation(double out[6], double in[12]);
 extern void sin_cos_cal(THETA_REGS *p);
 extern void THETA_REGS_VAR_INIT(THETA_REGS *p);
+extern void PID_VAR_INIT(PID *p);
+extern void RAMP_VAR_INIT(RAMP_REFERENCE *p);
 extern void dq2abc(DQ2ABC *p, THETA_REGS *q);
 extern void Clark(CLARK_REGS *p);
 extern void iClark(ICLARK_REGS *p);

@@ -5,7 +5,9 @@ float theta_50Hz;
 const float PIEx2 = 6.283185307179586476925286766559;
 const float PIEx100 = 314.15926535897932384626433832795;
 
-float32 waveA, waveB, waveC;
+float waveA, waveB, waveC;
+
+float test1, test2, test3;
 
 PID Ud_pid;
 PID Uq_pid;
@@ -15,8 +17,8 @@ RAMP_REFERENCE Id_ramp;
 RAMP_REFERENCE Iq_ramp;
 
 // for pid control
-float32 U_feedback_d, U_feedback_q;
-float32 I_feedback_d, I_feedback_q;
+float U_feedback_d, U_feedback_q;
+float I_feedback_d, I_feedback_q;
 
 /// @brief Generate the angle of system control
 void THETA_GENERATE(void)
@@ -49,6 +51,10 @@ void INV_XY_CAL(void)
     Park(&UPark, &U_theta); // alpha,beta->d,q
     U_feedback_d = UPark.d;
     U_feedback_q = UPark.q;
+
+    // test1 = UClark.alpha;
+    // test2 = UClark.beta;
+    // test3 = UClark.c;
 
     /*电流*/
     IClark.a = Sample_curr_A;

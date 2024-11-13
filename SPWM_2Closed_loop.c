@@ -19,11 +19,18 @@ void SPWM_2Closed_loop(double out_var[9], double in_var[12]) // 相当于主函�
 	Vdc = in_var[8];	// 直流母线电压
 	m = 2 * Vref / Vdc; // SPWM调制度
 
-	if (in_var[10] == 0) // 延时启动，一开始时钟信号都是0
-	{					 // 初始化
-		THETA_REGS_VAR_INIT(&U_theta);
+	if (in_var[10] == 0)			   // 延时启动，一开始时钟信号都是0
+	{								   // 初始化
+		THETA_REGS_VAR_INIT(&U_theta); // 角度计算变量初始化
 		THETA_REGS_VAR_INIT(&I_theta);
-		waveA = 0; // 调制波
+		PID_VAR_INIT(&Ud_pid); // PID参数变量初始化
+		PID_VAR_INIT(&Uq_pid);
+		RAMP_VAR_INIT(&Ud_ramp); // 斜坡给定变量初始化
+		RAMP_VAR_INIT(&Uq_ramp);
+		RAMP_VAR_INIT(&Id_ramp);
+		RAMP_VAR_INIT(&Iq_ramp);
+		theta_50Hz = 0; // 角度生成变量初始化
+		waveA = 0;		// 调制波
 		waveB = 0;
 		waveC = 0;
 		m = 0;
@@ -32,11 +39,11 @@ void SPWM_2Closed_loop(double out_var[9], double in_var[12]) // 相当于主函�
 	if (pulse_f_Old == 0 && pulse_f == 1)
 	{
 		/*Sample*/
-		Sample_curr_A = in_var[2];
+		Sample_curr_A = in_var[2]; // 电流采样变量
 		Sample_curr_B = in_var[3];
 		Sample_curr_C = in_var[4];
 
-		Sample_vol_A = in_var[5];
+		Sample_vol_A = in_var[5]; // 电压采样变量
 		Sample_vol_B = in_var[6];
 		Sample_vol_C = in_var[7];
 
@@ -44,23 +51,23 @@ void SPWM_2Closed_loop(double out_var[9], double in_var[12]) // 相当于主函�
 		sin_cos_cal(&U_theta); // 正余弦计算
 		INV_XY_CAL();		   // 坐标变换-->I_feedback_d, I_feedback_q, U_feedback_d, U_feedback_q
 
-		// OPEN_LOOP(m);
-		VOLTAGE_CLOSED_LOOP(Vref);
+		OPEN_LOOP(m);
+		// VOLTAGE_CLOSED_LOOP(Vref);
 		// CURRENT_CLOSED_LOOP(m);
 	}
 
 	// 4、载波调制 载波in_var[5]; 因为脉冲要一直比较，所以放到最外层，每个仿真时间执行一次
 	// 无死区；
-	out_var[0] = waveA < in_var[11] ? 1 : 0;
+	out_var[0] = waveA > in_var[11] ? 1 : 0;
 	out_var[1] = 1 - out_var[0];
-	out_var[2] = waveB < in_var[11] ? 1 : 0;
+	out_var[2] = waveB > in_var[11] ? 1 : 0;
 	out_var[3] = 1 - out_var[2];
-	out_var[4] = waveC < in_var[11] ? 1 : 0;
+	out_var[4] = waveC > in_var[11] ? 1 : 0;
 	out_var[5] = 1 - out_var[4];
 	// 测试端口6-8
-	out_var[6] = U_theta.theta;
-	out_var[7] = U_feedback_d;
-	out_var[8] = U_feedback_q;
+	out_var[6] = test1;
+	out_var[7] = test2;
+	out_var[8] = test3;
 
 	pulse_f_Old = pulse_f;
 }

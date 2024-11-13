@@ -87,6 +87,8 @@ typedef struct
 extern float waveA, waveB, waveC;
 extern float theta_50Hz;
 
+extern float test1, test2, test3;
+
 extern PID Ud_pid;
 extern PID Uq_pid;
 extern RAMP_REFERENCE Ud_ramp;

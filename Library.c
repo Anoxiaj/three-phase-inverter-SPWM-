@@ -12,12 +12,6 @@ float32 Sample_curr_A, Sample_curr_B, Sample_curr_C;
 
 float32 Vref, Iref, Vdc;
 
-/*voltage & current ramp given varible*/
-float32 ramp_Ud_delta, ramp_Ud_length, ramp_Ud_count, ramp_Ud_output; // 电压d变化率，变化步长，变化计数，变化输出
-float32 ramp_Uq_delta, ramp_Uq_length, ramp_Uq_count, ramp_Uq_output; // 电压q变化率，变化步长，变化计数，变化输出
-float32 ramp_Id_delta, ramp_Id_length, ramp_Id_count, ramp_Id_output; // 电流d变化率，变化步长，变化计数，变化输出
-float32 ramp_Iq_delta, ramp_Iq_length, ramp_Iq_count, ramp_Iq_output; // 电流q变化率，变化步长，变化计数，变化输出
-
 /// @brief matlab_varible---->C_varible
 /// @param out_var
 /// @param in_var
@@ -35,7 +29,7 @@ void sin_cos_cal(THETA_REGS *p)
     p->sin_120 = 0.8660254;
 
     p->cos_2theta = (p->cos_theta * p->cos_theta) - (p->sin_theta * p->sin_theta); // cos(2θ)
-    p->sin_2theta = (p->sin_theta * p->cos_theta) * 0.5;                           // sin(2θ)
+    p->sin_2theta = (p->sin_theta * p->cos_theta) * 2;                             // sin(2θ)
 
     p->cos_theta_p_120 = (p->cos_theta * p->cos_120) - (p->sin_theta * p->sin_120); // cos(theta+120)
     p->cos_theta_m_120 = (p->cos_theta * p->cos_120) + (p->sin_theta * p->sin_120); // cos(theta-129)
@@ -59,6 +53,33 @@ void THETA_REGS_VAR_INIT(THETA_REGS *p)
     p->sin_theta_m_120 = 0;
     p->cos_120 = 0;
     p->sin_120 = 0;
+}
+
+// PID变量初始化
+void PID_VAR_INIT(PID *p)
+{
+    p->Kp = 0;
+    p->Ki = 0;
+    p->Kc = 0;
+    p->ref = 0;
+    p->fdb = 0;
+    p->err = 0;
+    p->ui = 0;
+    p->up = 0;
+    p->upresat = 0;
+    p->uo = 0;
+    p->upper_limit = 0;
+    p->lower_limit = 0;
+}
+
+// RAMP_REFERENCE变量初始化
+void RAMP_VAR_INIT(RAMP_REFERENCE *p)
+{
+    p->Given = 0;
+    p->count = 0;
+    p->delta = 0;
+    p->length = 0;
+    p->output = 0;
 }
 
 // 正序相反变换
