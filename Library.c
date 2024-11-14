@@ -158,29 +158,29 @@ void Pid_calculation(PID *p)
     // 比例
     p->up = p->err * p->Kp;
     // 给比例限幅
-    if (p->up >= p->upper_limit)
-    {
-        p->up = p->upper_limit;
-    }
-    else if (p->up <= p->lower_limit)
-    {
-        p->up = p->lower_limit;
-    }
+    // if (p->up >= p->upper_limit)
+    // {
+    //     p->up = p->upper_limit;
+    // }
+    // else if (p->up <= p->lower_limit)
+    // {
+    //     p->up = p->lower_limit;
+    // }
 
     // 积分
     p->ui = p->ui + ((p->err * p->Ki) * SAMPLE_PERIOD);
     // 给积分限幅
-    if (p->ui >= p->upper_limit)
-    {
-        p->ui = p->upper_limit;
-    }
-    else if (p->ui <= p->lower_limit)
-    {
-        p->ui = p->lower_limit;
-    }
+    // if (p->ui >= p->upper_limit)
+    // {
+    //     p->ui = p->upper_limit;
+    // }
+    // else if (p->ui <= p->lower_limit)
+    // {
+    //     p->ui = p->lower_limit;
+    // }
 
     // 求和
-    p->upresat = p->up + p->ui; /* + _IQmpy(p->Kc,(p->uo - p->upresat));*/
+    p->upresat = p->up + p->ui;
     // 给输出限幅
     if (p->upresat >= p->upper_limit)
     {

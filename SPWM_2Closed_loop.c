@@ -51,8 +51,8 @@ void SPWM_2Closed_loop(double out_var[9], double in_var[12]) // 相当于主函�
 		sin_cos_cal(&U_theta); // 正余弦计算
 		INV_XY_CAL();		   // 坐标变换-->I_feedback_d, I_feedback_q, U_feedback_d, U_feedback_q
 
-		OPEN_LOOP(m);
-		// VOLTAGE_CLOSED_LOOP(Vref);
+		// OPEN_LOOP(m);
+		VOLTAGE_CLOSED_LOOP(Vref);
 		// CURRENT_CLOSED_LOOP(m);
 	}
 
