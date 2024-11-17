@@ -53,7 +53,7 @@ void SPWM_2Closed_loop(double out_var[9], double in_var[12]) // 相当于主函�
 
 		// OPEN_LOOP(m);
 		VOLTAGE_CLOSED_LOOP(Vref);
-		// CURRENT_CLOSED_LOOP(m);
+		// CURRENT_CLOSED_LOOP(Iref);
 	}
 
 	// 4、载波调制 载波in_var[5]; 因为脉冲要一直比较，所以放到最外层，每个仿真时间执行一次

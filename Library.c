@@ -170,14 +170,14 @@ void Pid_calculation(PID *p)
     // 积分
     p->ui = p->ui + ((p->err * p->Ki) * SAMPLE_PERIOD);
     // 给积分限幅
-    // if (p->ui >= p->upper_limit)
-    // {
-    //     p->ui = p->upper_limit;
-    // }
-    // else if (p->ui <= p->lower_limit)
-    // {
-    //     p->ui = p->lower_limit;
-    // }
+    if (p->ui >= p->upper_limit)
+    {
+        p->ui = p->upper_limit;
+    }
+    else if (p->ui <= p->lower_limit)
+    {
+        p->ui = p->lower_limit;
+    }
 
     // 求和
     p->upresat = p->up + p->ui;

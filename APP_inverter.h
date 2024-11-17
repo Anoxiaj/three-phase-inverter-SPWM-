@@ -91,6 +91,8 @@ extern float test1, test2, test3;
 
 extern PID Ud_pid;
 extern PID Uq_pid;
+extern PID Id_pid;
+extern PID Iq_pid;
 extern RAMP_REFERENCE Ud_ramp;
 extern RAMP_REFERENCE Uq_ramp;
 extern RAMP_REFERENCE Id_ramp;
@@ -108,5 +110,6 @@ extern void THETA_GENERATE(void);
 extern void INV_XY_CAL(void);
 extern void OPEN_LOOP(float Modulation);
 extern void VOLTAGE_CLOSED_LOOP(float V_ref);
+extern void CURRENT_CLOSED_LOOP(float I_ref);
 
 #endif /* APP_INVERTER_H_ */

@@ -11,6 +11,8 @@ float test1, test2, test3;
 
 PID Ud_pid;
 PID Uq_pid;
+PID Id_pid;
+PID Iq_pid;
 RAMP_REFERENCE Ud_ramp;
 RAMP_REFERENCE Uq_ramp;
 RAMP_REFERENCE Id_ramp;
@@ -142,5 +144,68 @@ void VOLTAGE_CLOSED_LOOP(float V_ref)
 
     test1 = Ud_pid.err;
     test2 = Uq_pid.err;
+    // test3 = waveC;
+}
+
+void CURRENT_CLOSED_LOOP(float I_ref)
+{
+    IPARK_REGS IiPark;
+    ICLARK_REGS IiClark;
+
+    /*d轴斜坡给定*/
+    Ud_ramp.Given = I_ref;
+    Ud_ramp.delta = 1;
+    Ud_ramp.length = 5;
+
+    Ramp_Given(&Id_ramp);
+    Id_pid.ref = Id_ramp.output;
+    Id_pid.fdb = I_feedback_d;
+
+    /*d轴PID计算*/
+    Id_pid.Kp = 0.01;
+    Id_pid.Ki = 50;
+
+    Id_pid.upper_limit = 1000;  // d轴PID限幅
+    Id_pid.lower_limit = -1000; // d轴PID限幅
+
+    Pid_calculation(&Id_pid); // 计算出d轴pid输出
+
+    /*q轴斜坡给定*/
+    Iq_ramp.Given = 0;
+    Iq_ramp.delta = 1;
+    Iq_ramp.length = 5;
+
+    Ramp_Given(&Iq_ramp);
+    Iq_pid.ref = Iq_ramp.output;
+    Iq_pid.fdb = I_feedback_q;
+
+    /*q轴PID计算*/
+    Iq_pid.Kp = 0.01;
+    Iq_pid.Ki = 50;
+
+    Iq_pid.upper_limit = 1;  // d轴PID限幅
+    Iq_pid.lower_limit = -1; // d轴PID限幅
+
+    Pid_calculation(&Iq_pid); // 计算出q轴pid输出
+
+    /*把pid计算出的dq输出值赋给park反变换的dq*/
+    IiPark.d = Id_pid.uo;
+    IiPark.q = Iq_pid.uo;
+
+    iPark(&IiPark, &I_theta); // Park反变换
+
+    /*把Park反变换的α和β赋给Clark反变换的α和β*/
+    IiClark.alpha = IiPark.alpha;
+    IiClark.beta = IiPark.beta;
+
+    iClark(&IiClark); // Clark反变换
+
+    /*对调制波进行归一化（SPWM的相电压最大值为(Vdc/2)*/
+    waveA = IiClark.a;
+    waveB = IiClark.b;
+    waveC = IiClark.c;
+
+    test1 = Id_pid.err;
+    test2 = Iq_pid.err;
     // test3 = waveC;
 }
