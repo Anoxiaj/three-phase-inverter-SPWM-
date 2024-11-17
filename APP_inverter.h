@@ -3,7 +3,6 @@
 
 #include "main.h"
 
-#define switch_loop 1 // 0：双闭环  1：单闭环
 // DQ->ABC
 typedef struct
 {

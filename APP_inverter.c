@@ -105,8 +105,8 @@ void VOLTAGE_CLOSED_LOOP(float V_ref)
     Ud_pid.fdb = U_feedback_d;
 
     /*d轴PID计算：单闭环时Kp=0.05 Ki=5*/ // 100: 2 300 ; 150:0.1 50
-    Ud_pid.Kp = 0.05;
-    Ud_pid.Ki = 5;
+    Ud_pid.Kp = U_Kp_parameter;
+    Ud_pid.Ki = U_Ki_parameter;
 #if switch_loop
     /*单闭环时限幅为+-1*/
     Ud_pid.upper_limit = 1;  // d轴PID限幅
@@ -128,8 +128,8 @@ void VOLTAGE_CLOSED_LOOP(float V_ref)
     Uq_pid.fdb = U_feedback_q;
 
     /*q轴PID计算*/
-    Uq_pid.Kp = 0.05;
-    Uq_pid.Ki = 5;
+    Uq_pid.Kp = U_Kp_parameter;
+    Uq_pid.Ki = U_Ki_parameter;
 
     Uq_pid.upper_limit = 1;  // d轴PID限幅
     Uq_pid.lower_limit = -1; // d轴PID限幅
@@ -178,8 +178,8 @@ void CURRENT_CLOSED_LOOP(float I_ref, float I_q)
     Id_pid.fdb = I_feedback_d;
 
     /*d轴PID计算*/
-    Id_pid.Kp = 0.05;
-    Id_pid.Ki = 5;
+    Id_pid.Kp = I_Kp_parameter;
+    Id_pid.Ki = I_Ki_parameter;
 
     Id_pid.upper_limit = 1;  // d轴PID限幅
     Id_pid.lower_limit = -1; // d轴PID限幅
@@ -196,8 +196,8 @@ void CURRENT_CLOSED_LOOP(float I_ref, float I_q)
     Iq_pid.fdb = I_feedback_q;
 
     /*q轴PID计算*/
-    Iq_pid.Kp = 0.05;
-    Iq_pid.Ki = 5;
+    Iq_pid.Kp = I_Kp_parameter;
+    Iq_pid.Ki = I_Ki_parameter;
 
     Iq_pid.upper_limit = 1;  // d轴PID限幅
     Iq_pid.lower_limit = -1; // d轴PID限幅
