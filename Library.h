@@ -39,7 +39,6 @@ extern float32 Sample_curr_A, Sample_curr_B, Sample_curr_C;
 
 extern float32 Vref, Iref, Vdc;
 
-extern void Var_allocation(double out[6], double in[12]);
 extern void sin_cos_cal(THETA_REGS *p);
 extern void THETA_REGS_VAR_INIT(THETA_REGS *p);
 extern void PID_VAR_INIT(PID *p);

@@ -3,6 +3,7 @@
 /*Sample varible*/
 #define SAMPLE_PERIOD 0.0001
 
+// 角度生成参数
 THETA_REGS U_theta;
 THETA_REGS I_theta;
 
@@ -10,17 +11,11 @@ THETA_REGS I_theta;
 float32 Sample_vol_A, Sample_vol_B, Sample_vol_C;
 float32 Sample_curr_A, Sample_curr_B, Sample_curr_C;
 
+// 参考值
 float32 Vref, Iref, Vdc;
 
-/// @brief matlab_varible---->C_varible
-/// @param out_var
-/// @param in_var
-void Var_allocation(double out[6], double in[12])
-{
-}
-
 /// @brief sin&cos calculate
-/// @param U_theta
+/// @param theta
 void sin_cos_cal(THETA_REGS *p)
 {
     p->cos_theta = cosf(p->theta);
@@ -101,6 +96,7 @@ void Clark(CLARK_REGS *p)
     p->beta = (p->b - p->c) / sqrt(3);
 }
 
+/// @brief alpha,beta -> abc
 void iClark(ICLARK_REGS *p)
 {
     p->a = p->alpha;
@@ -115,6 +111,7 @@ void Park(PARK_REGS *p, THETA_REGS *q)
     p->q = (-p->alpha * q->sin_theta) + (p->beta * q->cos_theta);
 }
 
+/// @brief d,q -> alpha,beta
 void iPark(IPARK_REGS *p, THETA_REGS *q)
 {
     p->alpha = (p->d * q->cos_theta) + (-p->q * q->sin_theta);

@@ -11,8 +11,6 @@ void SPWM_2Closed_loop(double out_var[9], double in_var[12]) // 相当于主函�
 {
 	pulse_f = in_var[9];
 
-	// Var_allocation(out_var[6], in_var[12]);
-
 	/*given*/
 	Vref = in_var[0];	// 参考相电压
 	Iref = in_var[1];	// 参考电感电流
@@ -54,6 +52,7 @@ void SPWM_2Closed_loop(double out_var[9], double in_var[12]) // 相当于主函�
 
 		// OPEN_LOOP(m);
 		VOLTAGE_CLOSED_LOOP(Vref);
+
 #if switch_loop
 		CURRENT_CLOSED_LOOP(Iref, 0); // 电流单闭环
 #else

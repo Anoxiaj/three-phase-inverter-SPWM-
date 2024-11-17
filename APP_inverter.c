@@ -163,6 +163,9 @@ void VOLTAGE_CLOSED_LOOP(float V_ref)
     // test3 = Ud_pid.uo;
 }
 
+/// @brief PID Current Closed Loop
+/// @param I_ref
+/// @param I_q
 void CURRENT_CLOSED_LOOP(float I_ref, float I_q)
 {
     IPARK_REGS IiPark;
