@@ -3,6 +3,7 @@
 
 #include "main.h"
 
+#define switch_loop 1 // 0：双闭环  1：单闭环
 // DQ->ABC
 typedef struct
 {
@@ -87,6 +88,8 @@ typedef struct
 extern float waveA, waveB, waveC;
 extern float theta_50Hz;
 
+extern float back_d, back_q;
+
 extern float test1, test2, test3;
 
 extern PID Ud_pid;
@@ -110,6 +113,6 @@ extern void THETA_GENERATE(void);
 extern void INV_XY_CAL(void);
 extern void OPEN_LOOP(float Modulation);
 extern void VOLTAGE_CLOSED_LOOP(float V_ref);
-extern void CURRENT_CLOSED_LOOP(float I_ref);
+extern void CURRENT_CLOSED_LOOP(float I_ref, float I_q);
 
 #endif /* APP_INVERTER_H_ */

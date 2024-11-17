@@ -49,11 +49,16 @@ void SPWM_2Closed_loop(double out_var[9], double in_var[12]) // 相当于主函�
 
 		THETA_GENERATE();	   // 角度生成-->U_theta, I_theta
 		sin_cos_cal(&U_theta); // 正余弦计算
-		INV_XY_CAL();		   // 坐标变换-->I_feedback_d, I_feedback_q, U_feedback_d, U_feedback_q
+		sin_cos_cal(&I_theta);
+		INV_XY_CAL(); // 坐标变换-->I_feedback_d, I_feedback_q, U_feedback_d, U_feedback_q
 
 		// OPEN_LOOP(m);
 		VOLTAGE_CLOSED_LOOP(Vref);
-		// CURRENT_CLOSED_LOOP(Iref);
+#if switch_loop
+		// CURRENT_CLOSED_LOOP(Iref, 0);
+#else
+		CURRENT_CLOSED_LOOP(back_d, back_q);
+#endif
 	}
 
 	// 4、载波调制 载波in_var[5]; 因为脉冲要一直比较，所以放到最外层，每个仿真时间执行一次
@@ -68,6 +73,9 @@ void SPWM_2Closed_loop(double out_var[9], double in_var[12]) // 相当于主函�
 	out_var[6] = test1;
 	out_var[7] = test2;
 	out_var[8] = test3;
+	// out_var[6] = Sample_curr_A;
+	// out_var[7] = Sample_curr_B;
+	// out_var[8] = Sample_curr_C;
 
 	pulse_f_Old = pulse_f;
 }
