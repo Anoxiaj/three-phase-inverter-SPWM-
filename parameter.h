@@ -3,7 +3,7 @@
 
 #include "main.h"
 
-#define switch_loop 0 // 0：双闭环  1：单闭环
+#define switch_loop 1 // 0：双闭环  1：单闭环
 
 #define U_Kp_parameter 2
 #define U_Ki_parameter 300

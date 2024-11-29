@@ -1,6 +1,6 @@
 #include "main.h"
 
-float theta_50Hz;
+float theta_50Hz, PLL_theta;
 #define PIE 3.1415926535897932384626433832795
 const float PIEx2 = 6.283185307179586476925286766559;
 const float PIEx100 = 314.15926535897932384626433832795;
@@ -15,6 +15,7 @@ PID Ud_pid;
 PID Uq_pid;
 PID Id_pid;
 PID Iq_pid;
+PID PLL_pid;
 RAMP_REFERENCE Ud_ramp;
 RAMP_REFERENCE Uq_ramp;
 RAMP_REFERENCE Id_ramp;
@@ -60,14 +61,25 @@ void INV_XY_CAL(void)
     // test2 = UClark.beta;
     // test3 = U_theta.theta;
 
-    /*电流*/
+    /*离网电流*/
+    // IClark.a = Sample_curr_A;
+    // IClark.b = Sample_curr_B;
+    // IClark.c = Sample_curr_C;
+    // Clark(&IClark); // ABC->alpha,beta
+    // IPark.alpha = IClark.alpha;
+    // IPark.beta = IClark.beta;
+    // Park(&IPark, &I_theta); // alpha,beta->d,q
+    // I_feedback_d = IPark.d;
+    // I_feedback_q = IPark.q;
+
+    /*并网逆变侧电流*/
     IClark.a = Sample_curr_A;
     IClark.b = Sample_curr_B;
     IClark.c = Sample_curr_C;
     Clark(&IClark); // ABC->alpha,beta
     IPark.alpha = IClark.alpha;
     IPark.beta = IClark.beta;
-    Park(&IPark, &I_theta); // alpha,beta->d,q
+    Park(&IPark, &G_theta); // alpha,beta->d,q
     I_feedback_d = IPark.d;
     I_feedback_q = IPark.q;
 
@@ -158,8 +170,8 @@ void VOLTAGE_CLOSED_LOOP(float V_ref)
     back_d = Ud_pid.uo;
     back_q = Uq_pid.uo;
 #endif
-    test1 = Ud_pid.err;
-    test2 = Uq_pid.err;
+    // test1 = Ud_pid.err;
+    // test2 = Uq_pid.err;
     // test3 = Ud_pid.uo;
 }
 
@@ -227,4 +239,54 @@ void CURRENT_CLOSED_LOOP(float I_ref, float I_q)
     // test1 = Id_pid.err;
     // test2 = Iq_pid.err;
     // test3 = Ud_pid.uo;
+}
+
+void PHASE_LOCKED_LOOP(void)
+{
+    CLARK_REGS GClark;
+    PARK_REGS GPark;
+
+    GClark.a = Sample_Grid_A;
+    GClark.b = Sample_Grid_B;
+    GClark.c = Sample_Grid_C;
+
+    Clark(&GClark);
+
+    GPark.alpha = GClark.alpha;
+    GPark.beta = GClark.beta;
+
+    sin_cos_cal(&G_theta);
+
+    /*
+    锁相环锁角度，与给定无关，只与q轴与A轴的关系有关
+    q轴与A轴重合时，锁的是Cos型：Park(&GPark, &G_theta);
+    q轴滞后A轴90°时，锁的是Sin型：Park_d90A(&GPark, &G_theta);
+    */
+    Park(&GPark, &G_theta);
+
+    PLL_pid.ref = 0;
+    PLL_pid.fdb = GPark.q;
+
+    PLL_pid.Kp = 1;
+    PLL_pid.Ki = 5;
+
+    PLL_pid.upper_limit = +PIEx100;
+    PLL_pid.lower_limit = -PIEx100;
+
+    Pid_calculation(&PLL_pid);
+
+    PLL_theta = PIEx100 - PLL_pid.uo;
+    G_theta.theta = G_theta.theta + PLL_theta * 0.0001;
+
+    // G_theta.theta = fmod(G_theta.theta, PIEx2);
+
+    G_theta.theta = G_theta.theta > PIEx2 ? (G_theta.theta - PIEx2) : G_theta.theta;
+    G_theta.theta = G_theta.theta < 0 ? (G_theta.theta + PIEx2) : G_theta.theta;
+
+    test1 = 60 * G_theta.theta;
+    test2 = Sample_Grid_A;
+    test3 = GPark.q;
+
+    // test2 = GPark.q;
+    // test3 = PLL_pid.err;
 }

@@ -6,10 +6,12 @@
 // 角度生成参数
 THETA_REGS U_theta;
 THETA_REGS I_theta;
+THETA_REGS G_theta;
 
 /*matlab_varible---->C_varible*/
 float32 Sample_vol_A, Sample_vol_B, Sample_vol_C;
 float32 Sample_curr_A, Sample_curr_B, Sample_curr_C;
+float32 Sample_Grid_A, Sample_Grid_B, Sample_Grid_C;
 
 // 参考值
 float32 Vref, Iref, Vdc;
@@ -104,6 +106,12 @@ void iClark(ICLARK_REGS *p)
     p->c = (p->alpha * (-0.5)) - (p->beta * sqrt(3) / 2);
 }
 
+void Clark_d90A(CLARK_REGS *p)
+{
+    p->alpha = (p->c - p->b) / sqrt(3);
+    p->beta = p->a; // 2/3(ua - ub/2  -uc/2)
+}
+
 /// @brief alpha,beta -> d,q (constant amplitude transform)
 void Park(PARK_REGS *p, THETA_REGS *q)
 {
@@ -116,6 +124,12 @@ void iPark(IPARK_REGS *p, THETA_REGS *q)
 {
     p->alpha = (p->d * q->cos_theta) + (-p->q * q->sin_theta);
     p->beta = (p->d * q->sin_theta) + (p->q * q->cos_theta);
+}
+
+void Park_d90A(PARK_REGS *p, THETA_REGS *q)
+{
+    p->d = (p->alpha * q->sin_theta) - (p->beta * q->cos_theta);
+    p->q = (p->alpha * q->cos_theta) + (p->beta * q->sin_theta);
 }
 
 /// @brief Ramp Given(given->目标值；delta->变换率；length->变换时间）

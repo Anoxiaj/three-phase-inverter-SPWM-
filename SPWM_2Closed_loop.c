@@ -7,7 +7,7 @@ float32 m = 0;				// 调制度
 
 /*变量定义*/
 
-void SPWM_2Closed_loop(double out_var[9], double in_var[12]) // 相当于主函数名：example_func【可以按照想法更改，最后一行处也要改】// out_var[6]输出变量，个数为6  in_var[6]输出变量，个数为6
+void SPWM_2Closed_loop(double out_var[9], double in_var[15]) // 相当于主函数名：example_func【可以按照想法更改，最后一行处也要改】// out_var[6]输出变量，个数为6  in_var[6]输出变量，个数为6
 {
 	pulse_f = in_var[9];
 
@@ -21,14 +21,18 @@ void SPWM_2Closed_loop(double out_var[9], double in_var[12]) // 相当于主函�
 	{								   // 初始化
 		THETA_REGS_VAR_INIT(&U_theta); // 角度计算变量初始化
 		THETA_REGS_VAR_INIT(&I_theta);
+		THETA_REGS_VAR_INIT(&G_theta);
 		PID_VAR_INIT(&Ud_pid); // PID参数变量初始化
 		PID_VAR_INIT(&Uq_pid);
+		PID_VAR_INIT(&PLL_pid);
 		RAMP_VAR_INIT(&Ud_ramp); // 斜坡给定变量初始化
 		RAMP_VAR_INIT(&Uq_ramp);
 		RAMP_VAR_INIT(&Id_ramp);
 		RAMP_VAR_INIT(&Iq_ramp);
 		theta_50Hz = 0; // 角度生成变量初始化
-		waveA = 0;		// 调制波
+		PLL_theta = 0;
+		G_theta.theta = 0;
+		waveA = 0; // 调制波
 		waveB = 0;
 		waveC = 0;
 		m = 0;
@@ -45,13 +49,19 @@ void SPWM_2Closed_loop(double out_var[9], double in_var[12]) // 相当于主函�
 		Sample_vol_B = in_var[6];
 		Sample_vol_C = in_var[7];
 
+		Sample_Grid_A = in_var[12];
+		Sample_Grid_B = in_var[13];
+		Sample_Grid_C = in_var[14];
+
+		PHASE_LOCKED_LOOP();
+
 		THETA_GENERATE();	   // 角度生成-->U_theta, I_theta
 		sin_cos_cal(&U_theta); // 正余弦计算
 		sin_cos_cal(&I_theta);
 		INV_XY_CAL(); // 坐标变换-->I_feedback_d, I_feedback_q, U_feedback_d, U_feedback_q
 
 		// OPEN_LOOP(m);
-		VOLTAGE_CLOSED_LOOP(Vref);
+		// VOLTAGE_CLOSED_LOOP(Vref);
 
 #if switch_loop
 		CURRENT_CLOSED_LOOP(Iref, 0); // 电流单闭环

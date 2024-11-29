@@ -33,9 +33,11 @@ typedef struct
 
 extern THETA_REGS U_theta;
 extern THETA_REGS I_theta;
+extern THETA_REGS G_theta;
 
 extern float32 Sample_vol_A, Sample_vol_B, Sample_vol_C;
 extern float32 Sample_curr_A, Sample_curr_B, Sample_curr_C;
+extern float32 Sample_Grid_A, Sample_Grid_B, Sample_Grid_C;
 
 extern float32 Vref, Iref, Vdc;
 
@@ -46,8 +48,10 @@ extern void RAMP_VAR_INIT(RAMP_REFERENCE *p);
 extern void dq2abc(DQ2ABC *p, THETA_REGS *q);
 extern void Clark(CLARK_REGS *p);
 extern void iClark(ICLARK_REGS *p);
+extern void Clark_d90A(CLARK_REGS *p);
 extern void Park(PARK_REGS *p, THETA_REGS *q);
 extern void iPark(IPARK_REGS *p, THETA_REGS *q);
+extern void Park_d90A(PARK_REGS *p, THETA_REGS *q);
 extern void Ramp_Given(RAMP_REFERENCE *v);
 
 extern void Pid_calculation(PID *p);

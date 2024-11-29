@@ -85,7 +85,7 @@ typedef struct
 #define PID_DEFAULTS {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 
 extern float waveA, waveB, waveC;
-extern float theta_50Hz;
+extern float theta_50Hz, PLL_theta;
 
 extern float back_d, back_q;
 
@@ -95,15 +95,11 @@ extern PID Ud_pid;
 extern PID Uq_pid;
 extern PID Id_pid;
 extern PID Iq_pid;
+extern PID PLL_pid;
 extern RAMP_REFERENCE Ud_ramp;
 extern RAMP_REFERENCE Uq_ramp;
 extern RAMP_REFERENCE Id_ramp;
 extern RAMP_REFERENCE Iq_ramp;
-
-extern float U_Clark_a, U_Clark_b, U_Clark_c, U_Clark_alpha, U_Clark_beta;
-extern float I_Clark_a, I_Clark_b, I_Clark_c, I_Clark_alpha, I_Clark_beta;
-extern float U_Park_alpha, U_Park_beta, U_Park_d, U_Park_q;
-extern float I_Park_alpha, I_Park_beta, I_Park_d, I_Park_q;
 
 extern float U_feedback_d, U_feedback_q;
 extern float I_feedback_d, I_feedback_q;
@@ -113,5 +109,6 @@ extern void INV_XY_CAL(void);
 extern void OPEN_LOOP(float Modulation);
 extern void VOLTAGE_CLOSED_LOOP(float V_ref);
 extern void CURRENT_CLOSED_LOOP(float I_ref, float I_q);
+extern void PHASE_LOCKED_LOOP(void);
 
 #endif /* APP_INVERTER_H_ */
