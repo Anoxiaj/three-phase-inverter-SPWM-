@@ -7,7 +7,7 @@ float32 m = 0;				// 调制度
 
 /*变量定义*/
 
-void SPWM_2Closed_loop(double out_var[9], double in_var[15]) // 相当于主函数名：example_func【可以按照想法更改，最后一行处也要改】// out_var[6]输出变量，个数为6  in_var[6]输出变量，个数为6
+void SPWM_2Closed_loop(double out_var[9], double in_var[18]) // 相当于主函数名：example_func【可以按照想法更改，最后一行处也要改】// out_var[6]输出变量，个数为6  in_var[6]输出变量，个数为6
 {
 	pulse_f = in_var[9];
 
@@ -49,11 +49,11 @@ void SPWM_2Closed_loop(double out_var[9], double in_var[15]) // 相当于主函�
 		Sample_vol_B = in_var[6];
 		Sample_vol_C = in_var[7];
 
-		Sample_Grid_A = in_var[12];
+		Sample_Grid_A = in_var[12]; // 电网电压采样变量
 		Sample_Grid_B = in_var[13];
 		Sample_Grid_C = in_var[14];
 
-		PHASE_LOCKED_LOOP();
+		PHASE_LOCKED_LOOP(); // 角度生成-->G_theta
 
 		THETA_GENERATE();	   // 角度生成-->U_theta, I_theta
 		sin_cos_cal(&U_theta); // 正余弦计算

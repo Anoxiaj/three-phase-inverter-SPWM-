@@ -62,26 +62,26 @@ void INV_XY_CAL(void)
     // test3 = U_theta.theta;
 
     /*离网电流*/
-    // IClark.a = Sample_curr_A;
-    // IClark.b = Sample_curr_B;
-    // IClark.c = Sample_curr_C;
-    // Clark(&IClark); // ABC->alpha,beta
-    // IPark.alpha = IClark.alpha;
-    // IPark.beta = IClark.beta;
-    // Park(&IPark, &I_theta); // alpha,beta->d,q
-    // I_feedback_d = IPark.d;
-    // I_feedback_q = IPark.q;
-
-    /*并网逆变侧电流*/
     IClark.a = Sample_curr_A;
     IClark.b = Sample_curr_B;
     IClark.c = Sample_curr_C;
     Clark(&IClark); // ABC->alpha,beta
     IPark.alpha = IClark.alpha;
     IPark.beta = IClark.beta;
-    Park(&IPark, &G_theta); // alpha,beta->d,q
+    Park(&IPark, &I_theta); // alpha,beta->d,q
     I_feedback_d = IPark.d;
     I_feedback_q = IPark.q;
+
+    /*并网电流*/
+    // IClark.a = Sample_curr_A;
+    // IClark.b = Sample_curr_B;
+    // IClark.c = Sample_curr_C;
+    // Clark(&IClark); // ABC->alpha,beta
+    // IPark.alpha = IClark.alpha;
+    // IPark.beta = IClark.beta;
+    // Park(&IPark, &G_theta); // alpha,beta->d,q
+    // I_feedback_d = IPark.d;
+    // I_feedback_q = IPark.q;
 
     // test1 = IPark.d;
     // test2 = IPark.q;
@@ -286,7 +286,4 @@ void PHASE_LOCKED_LOOP(void)
     test1 = 60 * G_theta.theta;
     test2 = Sample_Grid_A;
     test3 = GPark.q;
-
-    // test2 = GPark.q;
-    // test3 = PLL_pid.err;
 }
